@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes - Take Note Do Best</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #243b55, #141e30);
+      color: white;
+      transition: background-color 0.5s, color 0.5s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Header Design */
+    header {
+      width: 100%;
+      padding: 20px;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      font-size: 36px;
+      letter-spacing: 2px;
+      text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Title Design */
+    header h1 {
+      font-size: 48px;
+      font-weight: bold;
+      background-image: linear-gradient(45deg, #ff6f61, #00c6ff);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    /* Important and Log Out Buttons for Desktop */
+    #desktopButtons {
+      display: flex;
+    }
+
+    #importantButton {
+      padding: 10px 20px;
+      background-color: red;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #logOutButton {
+      padding: 10px 20px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #logOutButton:hover {
+      background-color: #0072ff;
+    }
+
+    /* Important Popup */
+    #importantPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 40px;
+      width: 400px;
+      border-radius: 10px;
+      display: none;
+      z-index: 2000;
+      text-align: center;
+    }
+
+    #importantPopup h3 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    #importantPopup p {
+      margin-bottom: 15px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    #closeImportant {
+      padding: 10px 20px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Hamburger Menu */
+    #hamburgerMenu {
+      background-color: #00c6ff;
+      border-radius: 50%;
+      border: none;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(0, 198, 255, 0.3);
+      transition: background-color 0.3s;
+    }
+
+    #hamburgerMenu:hover {
+      background-color: #0072ff;
+    }
+
+    /* Note Form */
+    #noteForm {
+      display: flex;
+      flex-direction: column;
+      margin: 120px auto 20px;
+      max-width: 900px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0, 198, 255, 0.3);
+      width: 100%;
+    }
+
+    #noteTitle, #noteContent {
+      padding: 15px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #e0e0e0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    #noteContent {
+      height: 300px;
+      resize: both;
+      overflow: auto;
+    }
+
+    #addNoteButton {
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00c6ff;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #addNoteButton:hover {
+      background-color: #0072ff;
+    }
+
+    /* Notes List */
+    #noteList {
+      position: fixed;
+      left: -250px;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #333;
+      padding: 20px;
+      transition: left 0.3s;
+      overflow-y: auto;
+      color: white;
+      z-index: 1000;
+    }
+
+    #noteList.open {
+      left: 0;
+    }
+
+    #noteList h2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: gold;
+    }
+
+    .noteListItem {
+      padding: 10px;
+      border-bottom: 1px solid #555;
+      word-wrap: break-word;
+    }
+
+    .noteListItem .noteTitle {
+      font-size: 18px;
+      font-weight: bold;
+      word-wrap: break-word;
+    }
+
+    .noteListItem .actions {
+      margin-top: 5px;
+    }
+
+    .noteListItem .actions button {
+      margin-right: 10px;
+      font-size: 14px;
+      background: none;
+      border: none;
+      color: #ffeb3b;
+      cursor: pointer;
+    }
+
+    /* Note Display Popup */
+    #noteDisplay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 40px;
+      width: 80%;
+      height: 80%;
+      border-radius: 10px;
+      display: none;
+      z-index: 2000;
+      overflow-y: auto;
+    }
+
+    #noteDisplay h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    #noteDisplay p {
+      margin-bottom: 20px;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    #noteDisplay .closeIcon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: gold;
+    }
+
+    #closeNoteButton {
+      padding: 10px 20px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #closeNoteButton:hover {
+      background-color: #0072ff;
+    }
+
+    /* Highlighted Text */
+    .highlighted {
+      text-decoration: underline;
+      text-decoration-color: red;
+    }
+
+    /* Success Popup */
+    #successPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #00c6ff;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+      z-index: 2000;
+    }
+
+    #successPopup button {
+      margin-top: 10px;
+      background-color: white;
+      color: #00c6ff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      header {
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      header h1 {
+        font-size: 18px; /* Good Day text size reduced */
+      }
+
+      #desktopButtons {
+        display: none;
+      }
+
+      /* Add buttons to notes list in mobile */
+      #noteList .mobileButtons {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+      }
+
+      #noteList .mobileButtons button {
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        background-color: red; /* Red background for mobile buttons */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <button id="hamburgerMenu">☰</button>
+  <h1>Good Day, <span id="username">User</span>! Be Productive!</h1>
+  <div id="desktopButtons">
+    <button id="importantButton">Important</button>
+    <button id="logOutButton">Log Out</button>
+  </div>
+</header>
+
+<!-- Hamburger Menu and Notes List -->
+<div id="noteList" class="closed">
+  <h2>Note List <span class="closeIcon" id="closeList">×</span></h2>
+  
+  <!-- Mobile Buttons for Important and Log Out -->
+  <div class="mobileButtons">
+    <button id="importantButtonMobile">Important</button>
+    <button id="logOutButtonMobile">Log Out</button>
+  </div>
+  
+  <div id="noteListItems"></div>
+</div>
+
+<!-- Important Popup -->
+<div id="importantPopup">
+  <h3>Important Information</h3>
+  <p>If you select a text with your mouse and press the 'H' key, it will be underlined in red.</p>
+  <p>Our website stores notes and information in the browser's memory. Be sure to save important notes to a document.</p>
+  <p>If you don't want to lose data, do not clear the website data from your browser settings.</p>
+  <button id="closeImportant">Close</button>
+</div>
+
+<!-- Note Display Popup -->
+<div id="noteDisplay">
+  <span class="closeIcon" id="closeNote">×</span>
+  <h2 id="displayTitle">Note Title</h2>
+  <div id="displayContent">Note content goes here...</div>
+  <button id="closeNoteButton">Close Note</button>
+</div>
+
+<!-- Success Popup for Note Deletion -->
+<div id="successPopup">
+  <p>Note has been successfully deleted!</p>
+  <button id="closeSuccess">Okay</button>
+</div>
+
+<form id="noteForm">
+  <input type="text" id="noteTitle" placeholder="Enter your note title..." required>
+  <div contenteditable="true" id="noteContent" placeholder="Enter your note..." required></div>
+  <button type="submit" id="addNoteButton">Add Note</button>
+</form>
+
+<script>
+  let notes = JSON.parse(localStorage.getItem('notes')) || [];
+  let editMode = false;
+  let editId = null;
+  const noteTitle = document.getElementById('noteTitle');
+  const noteContent = document.getElementById('noteContent');
+  const noteList = document.getElementById('noteList');
+  const noteListItems = document.getElementById('noteListItems');
+  const noteDisplay = document.getElementById('noteDisplay');
+  const displayTitle = document.getElementById('displayTitle');
+  const displayContent = document.getElementById('displayContent');
+  const successPopup = document.getElementById('successPopup');
+  const closeNoteButton = document.getElementById('closeNoteButton');
+
+  // Important button opens popup
+  document.getElementById('importantButton').addEventListener('click', function() {
+    document.getElementById('importantPopup').style.display = 'block';
+  });
+
+  document.getElementById('importantButtonMobile').addEventListener('click', function() {
+    document.getElementById('importantPopup').style.display = 'block';
+  });
+
+  // Close Important popup
+  document.getElementById('closeImportant').addEventListener('click', function() {
+    document.getElementById('importantPopup').style.display = 'none';
+  });
+
+  // Log Out button redirects to index.html
+  document.getElementById('logOutButton').addEventListener('click', function() {
+    window.location.href = 'index.html';
+  });
+
+  document.getElementById('logOutButtonMobile').addEventListener('click', function() {
+    window.location.href = 'index.html';
+  });
+
+  // Hamburger menu toggles notes list
+  document.getElementById('hamburgerMenu').addEventListener('click', function() {
+    noteList.classList.toggle('open');
+  });
+
+  // Close Notes List
+  document.getElementById('closeList').addEventListener('click', function() {
+    noteList.classList.remove('open');
+  });
+
+  // Add a new note
+  document.getElementById('noteForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const title = noteTitle.value.trim();
+    const content = noteContent.innerHTML.trim();
+
+    if (editMode) {
+      notes = notes.map(note => note.id === editId ? { ...note, title: title, content: content } : note);
+      editMode = false;
+      editId = null;
+    } else {
+      const note = {
+        id: Date.now(),
+        title: title,
+        content: content
+      };
+      notes.push(note);
+    }
+
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
+    noteTitle.value = '';
+    noteContent.innerHTML = '';
+  });
+
+  // Render the notes list
+  function renderNotes() {
+    noteListItems.innerHTML = '';
+    notes.forEach(note => {
+      const listItem = document.createElement('div');
+      listItem.classList.add('noteListItem');
+      listItem.innerHTML = `
+        <div class="noteTitle">${note.title}</div>
+        <div class="actions">
+          <button onclick="openNote(${note.id})">Open</button>
+          <button onclick="editNoteFromList(${note.id})">Edit</button>
+          <button onclick="deleteNoteFromList(${note.id})">Delete</button>
+        </div>
+      `;
+      noteListItems.appendChild(listItem);
+    });
+  }
+
+  // Open a note
+  function openNote(id) {
+    const note = notes.find(n => n.id === id);
+    displayTitle.textContent = note.title;
+    displayContent.innerHTML = note.content;
+    noteDisplay.style.display = 'block';
+  }
+
+  // Close note popup
+  document.getElementById('closeNote').addEventListener('click', function() {
+    noteDisplay.style.display = 'none';
+  });
+
+  closeNoteButton.addEventListener('click', function() {
+    noteDisplay.style.display = 'none';
+  });
+
+  // Delete a note and show success popup
+  function deleteNoteFromList(id) {
+    notes = notes.filter(note => note.id !== id);
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
+    showSuccessPopup();
+  }
+
+  // Show success popup for deletion
+  function showSuccessPopup() {
+    successPopup.style.display = 'block';
+  }
+
+  // Close success popup
+  document.getElementById('closeSuccess').addEventListener('click', function() {
+    successPopup.style.display = 'none';
+  });
+
+  // Edit a note
+  function editNoteFromList(id) {
+    editMode = true;
+    editId = id;
+    const note = notes.find(n => n.id === id);
+    noteTitle.value = note.title;
+    noteContent.innerHTML = note.content;
+    noteList.classList.remove('open');
+  }
+
+  // Highlight text with 'H' key and retain it
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'h' || event.key === 'H') {
+      document.execCommand('underline', false, null);
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.classList.add('highlighted');
+        range.surroundContents(span);
+      }
+    }
+  });
+
+  // Render notes on page load
+  renderNotes();
+</script>
+
+</body>
+</html>

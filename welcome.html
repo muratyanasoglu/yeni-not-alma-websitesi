@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Take Note Do Best</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      line-height: 1.5;
+      color: #d3d3d3;
+      text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #00c6ff;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.4s;
+      box-shadow: 0 8px 25px rgba(0, 198, 255, 0.3);
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #0072ff;
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 114, 255, 0.5);
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 36px;
+      }
+      p {
+        font-size: 16px;
+      }
+      button {
+        padding: 12px 25px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 28px;
+      }
+      p {
+        font-size: 14px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome, <span id="username"></span>!</h1>
+  <p>We're glad to have you back. Ready to start taking notes and get things done? Let's make today productive!</p>
+  <button id="startNotes">Start Taking Notes</button>
+
+  <script>
+    // Kullanıcı adı localStorage'dan alınır ve gösterilir
+    const user = JSON.parse(localStorage.getItem('user'));
+    const usernameSpan = document.getElementById('username');
+    usernameSpan.textContent = user ? user.username : 'Guest';
+
+    // Butona tıklandığında not alma sayfasına yönlendirilir
+    const startNotesButton = document.getElementById('startNotes');
+    startNotesButton.addEventListener('click', function() {
+      window.location.href = 'notes.html'; // Not alma sayfasına yönlendirme
+    });
+  </script>
+  
+</body>
+</html>

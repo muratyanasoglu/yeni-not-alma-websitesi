@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Take Note Do Best</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, #141e30, #243b55);
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #ffffff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      width: 400px;
+      text-align: center;
+      animation: slideDown 1.2s ease-in-out;
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ffffff;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+      box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    input::placeholder {
+      color: #d3d3d3;
+    }
+
+    /* Şifre alanını ve göz ikonunu kapsayan yapı */
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+      box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00c6ff;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.4s, transform 0.3s;
+    }
+
+    button:hover {
+      background-color: #0072ff;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 20px rgba(0, 114, 255, 0.4);
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #b3b3b3;
+    }
+
+    .footer-text a {
+      color: #00c6ff;
+      text-decoration: none;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      margin-top: 25px;
+    }
+
+    .social-icons a {
+      color: white;
+      margin: 0 10px;
+      font-size: 24px;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #00c6ff;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 15px;
+      color: #00c6ff;
+      text-decoration: none;
+    }
+  </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Websitenin adı ve logo -->
+    <img src="logo.png" alt="Website Logo">
+    <h1>Take Note Do Best</h1>
+
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+
+      <!-- Şifre alanı ve göz ikonu -->
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" required>
+        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+      </div>
+
+      <button type="submit">Log In</button>
+    </form>
+    <!-- Forgot Password bağlantısı -->
+    <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+    
+    <div class="footer-text">
+      Don't have an account? <a href="register.html">Sign Up</a>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.linkedin.com/"><i class="fab fa-twitter"></i></a></a>
+      <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user && user.username === username && user.password === password) {
+        alert('Login successful!');
+        window.location.href = 'notes.html';
+      } else {
+        alert('Invalid username or password.');
+      }
+    });
+
+    // Şifreyi Göster/Gizle İşlevi
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
+</body>
+</html>
